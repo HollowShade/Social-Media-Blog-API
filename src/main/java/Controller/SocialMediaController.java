@@ -16,18 +16,34 @@ public class SocialMediaController {
      */
     public Javalin startAPI() {
         Javalin app = Javalin.create();
-        app.get("example-endpoint", this::exampleHandler);
+        //Commenting out example endpoint: app.get("example-endpoint", this::exampleHandler);
+
+        //TODO: Add User method and endpoint (POST localhost:8080/register)
+
+        //TODO: Get user method and endpoint (POST localhost:8080/login)
+
+        //TODO: Create message method and endpoint (POST localhost:8080/messages)
+
+        //TODO: Get all messages method and endpoint (GET localhost:8080/messages)
+
+        //TODO: Get message by ID method and endpoint (GET localhost:8080/messages/{message_id})
+
+        //TODO: Delete message by ID method and endpoint (DELETE localhost:8080/messages/{message_id})
+
+        //TODO: Update message by ID method and endpoint (PATCH localhost:8080/messages/{message_id})
+
+        //TODO: Get messages by Account ID method and endpoint (GET localhost:8080/accounts/{account_id}/messages)
 
         return app;
     }
 
     /**
-     * This is an example handler for an example endpoint.
+     * This is an example handler for an example endpoint. I've commented it out so users can't use it in the final version of the app.
      * @param context The Javalin Context object manages information about both the HTTP request and response.
-     */
+     
     private void exampleHandler(Context context) {
         context.json("sample text");
-    }
+    }*/
 
 
 }
