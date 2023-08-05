@@ -22,6 +22,7 @@ public class SocialMediaController {
         //Commenting out example endpoint: app.get("example-endpoint", this::exampleHandler);
 
         //TODO: Add User method and endpoint (POST localhost:8080/register)
+        app.post("register", this::CreateAccount);
 
         //TODO: Get user method and endpoint (POST localhost:8080/login)
 
@@ -38,6 +39,11 @@ public class SocialMediaController {
         //TODO: Get messages by Account ID method and endpoint (GET localhost:8080/accounts/{account_id}/messages)
 
         return app;
+    }
+
+    //TODO: Add User method
+    private void CreateAccount(Context context){
+
     }
 
     /**

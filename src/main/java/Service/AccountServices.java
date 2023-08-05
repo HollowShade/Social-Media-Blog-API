@@ -13,7 +13,11 @@ public class AccountServices {
     
     //TODO: Add User method
     public Account CreateAccount(String username, String password){
-        return null;
+        //Check the parameters to be sure they meet requirements
+        if (username.equals(null) || username.equals("") || password.length() < 4){
+            return null;
+        }
+        return dao.CreateAccount(new Account(username, password));
     }
 
     //TODO: Get user method

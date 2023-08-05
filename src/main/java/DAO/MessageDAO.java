@@ -6,8 +6,8 @@ import Model.Message;
 //This class also works with lists, import list.
 import java.util.List;
 
-//It also works with databases, import Connection
-import java.sql.Connection;
+//It also works with databases, import sql
+import java.sql.*;
 
 /**
  * The MessageDAO class serves as the DAO for the message table
