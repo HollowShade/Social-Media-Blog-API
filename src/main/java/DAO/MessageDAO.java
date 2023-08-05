@@ -20,27 +20,27 @@ public class MessageDAO {
     }
 
     //TODO: Get all messages method
-    public List<Message> getMessages(){
+    public List<Message> GetAllMessages(){
         return null;
     }
 
     //TODO: Get message by ID method
-    public Message getMessageByID(int messageID){
+    public Message GetMessageByID(int messageID){
         return null;
     }
     
     //TODO: Get messages by Account ID method
-    public List<Message> getMessagesByUser(int userID){
+    public List<Message> GetMessagesByUser(int userID){
         return null;
     }
 
     //TODO: Update message by ID method
-    public Message updatMessage(Message newMessage){
+    public Message UpdatMessage(Message newMessage){
         return null;
     }
 
     //TODO: Delete message by ID method
-    public Message deleteMessage(int messageID){
+    public Message DeleteMessage(int messageID){
         return null;
     }
 }

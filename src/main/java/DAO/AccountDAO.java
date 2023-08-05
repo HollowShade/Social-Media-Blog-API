@@ -6,6 +6,7 @@ import Model.Account;
 //It also works with databases, import Connection
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * The AccountDAO class serves as the DAO for the account table
@@ -18,14 +19,21 @@ public class AccountDAO {
         //Create a connection
         Connection link = Util.ConnectionUtil.getConnection();
 
-        //Create a statement
-        
-        
+        //From here on in, we need a try-catch block
+        try {
+            //Create a statement
+            PreparedStatement sql = link.prepareStatement("INSERT INTO account VALUES (DEFAULT, ?, ?);");
+
+        } 
+        catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }    
         return null;
     }
 
     //TODO: Get user method
-    public Account getAccount(Account loginAccount){
+    public Account GetAccount(Account loginAccount){
         return null;
     }
 }
