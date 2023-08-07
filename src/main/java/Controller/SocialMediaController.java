@@ -36,10 +36,11 @@ public class SocialMediaController {
         Javalin app = Javalin.create();
         //Commenting out example endpoint: app.get("example-endpoint", this::exampleHandler);
 
-        //TODO: Add User method and endpoint (POST localhost:8080/register)
+        //Account registration endpoint
         app.post("register", this::CreateAccount);
 
-        //TODO: Get user method and endpoint (POST localhost:8080/login)
+        //Login endpoint
+        app.post("login", this::Login);
 
         //TODO: Create message method and endpoint (POST localhost:8080/messages)
 
@@ -57,7 +58,8 @@ public class SocialMediaController {
     }
 
     /**
-     * The CreateAccount method takes 
+     * The CreateAccount method takes a username and password from JSON and tells AccountServices to turn it into a new account
+     * for the account database.
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
     private void CreateAccount(Context context){
@@ -66,18 +68,50 @@ public class SocialMediaController {
             Account input = translater.readValue(context.body(), Account.class);
             Account newAccount = AccountServer.CreateAccount(input);
 
-            //The method succeeds if newAccount isn't null, in which case we return the account to json
+            //The method succeeds if newAccount isn't null, in which case we return the account to json. Otherwise, tell JSON that the method failed.
             if(newAccount != null){
                 context.json(translater.writeValueAsString(newAccount));
             }
-        } //If an exception occurs, we want to know about it
+            else {
+                context.status(400);
+            }
+        } //If an exception occurs, we want to know about it, we also want to tell JSON about the failure
         catch (JsonMappingException e) {
             e.printStackTrace();
+            //context.status(400); TODO: Find a better error
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+            //context.status(400); TODO: Find a better error
         }
-        //If we're out here, the account creation failed, so send an error
-        context.status(400);
+    }
+
+    /**
+     * The Login method takes a username and password from JSON and tells AccountServices to see if there's an account with the
+     * provided username and password in the account database before letting the user log in. If AccountServices can't deliver, 
+     * the user can't log in.
+     * @param context The Javalin Context object manages information about both the HTTP request and response.
+     */
+    private void Login(Context context){
+        try {
+            //Get input from JSON and send it to AccountServices
+            Account input = translater.readValue(context.body(), Account.class);
+            Account loginAccount = AccountServer.CreateAccount(input);
+
+            //The method succeeds if newAccount isn't null, in which case we return the account to json. Otherwise, tell JSON that the method failed.
+            if(loginAccount != null){
+                context.json(translater.writeValueAsString(loginAccount));
+            }
+            else {
+                context.status(401);
+            }
+        } //If an exception occurs, we want to know about it, we also want to tell JSON about the failure
+        catch (JsonMappingException e) {
+            e.printStackTrace();
+            //context.status(401); TODO: Find a better error
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            //context.status(401); TODO: Find a better error
+        }
     }
 
     /**

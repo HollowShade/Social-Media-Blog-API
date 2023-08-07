@@ -12,7 +12,12 @@ import java.sql.*;
  * In the future, maybe it will also update and delete accounts in case the user wants to change their username or leave the app.
  */
 public class AccountDAO {
-    //TODO: Add User method
+    /**
+     * The CreateAccount method takes an account from accountServices and attempts to add it to the account database.
+     * If it succeeds, it returns the new account with ID
+     * If it fails, it tells AccountServices that the account wasn't added.
+     * @param newAccount The account provided by AccountServices
+     */
     public Account CreateAccount(Account newAccount){
         //Create a connection
         Connection link = Util.ConnectionUtil.getConnection();
@@ -43,11 +48,46 @@ public class AccountDAO {
             //If something goes wrong, give the developer details
             e.printStackTrace();
         }
+
+        //If we're outside of the try catch block after the connection, assume the operation failed.
         return null;
     }
 
-    //TODO: Get user method
+    /**
+     * The GetAccount method takes an account from AccountServices and checks if it exists in the account database.
+     * If it succeeds, it returns the matching account
+     * If it fails, it tells AccountServices that the account doesn't exist.
+     * @param loginAccount The account provided by AccountServices
+     */
     public Account GetAccount(Account loginAccount){
+        //Create a connection
+        Connection link = Util.ConnectionUtil.getConnection();
+
+        //From here on in, we need a try-catch block
+        try {
+            //Create a statement
+            PreparedStatement sql = link.prepareStatement("SELECT * FROM account WHERE username = ? AND password = ?;");
+
+            //Set sql's parameters
+            sql.setString(1, loginAccount.getUsername());
+            sql.setString(2, loginAccount.getPassword());
+
+            //Execute the sql statement and retrieve the resultset
+            ResultSet matchingAccount = sql.executeQuery();
+
+            //Check if there's an entry, if so, add it's ID to the account object parameter and return it
+            if (matchingAccount.next()){
+                loginAccount.setAccount_id(matchingAccount.getInt(1));
+                link.close();
+                return loginAccount;
+            }
+        } 
+        catch (SQLException e) {
+            //If something goes wrong, give the developer details
+            e.printStackTrace();
+        }
+
+        //If we're outside of the try catch block after the connection, assume the operation failed.
         return null;
     }
 }
