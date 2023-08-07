@@ -3,8 +3,16 @@ package Controller;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-//There are methods that return message contents, so this class needs to use the message model
-import Model.Message;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+//This import allows us to translate JSON into Java and vice versa
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+//There are methods that return message and account contents, so this class needs to use both models
+import Model.*;
+
+//Accessing those methods requires their service methods, import the service classes
+import Service.*;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
@@ -12,6 +20,13 @@ import Model.Message;
  * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
  */
 public class SocialMediaController {
+    //Objects that allow us to access service methods
+    AccountServices AccountServer = new AccountServices();
+    MessageServices MessageServer = new MessageServices();
+
+    //Can an objectmapper be a field?
+    ObjectMapper translater = new ObjectMapper();
+    
     /**
      * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test
      * suite must receive a Javalin object from this method.
@@ -41,9 +56,28 @@ public class SocialMediaController {
         return app;
     }
 
-    //TODO: Add User method
+    /**
+     * The CreateAccount method takes 
+     * @param context The Javalin Context object manages information about both the HTTP request and response.
+     */
     private void CreateAccount(Context context){
+        try {
+            //Get input from JSON and send it to AccountServices
+            Account input = translater.readValue(context.body(), Account.class);
+            Account newAccount = AccountServer.CreateAccount(input);
 
+            //The method succeeds if newAccount isn't null, in which case we return the account to json
+            if(newAccount != null){
+                context.json(translater.writeValueAsString(newAccount));
+            }
+        } //If an exception occurs, we want to know about it
+        catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        //If we're out here, the account creation failed, so send an error
+        context.status(400);
     }
 
     /**

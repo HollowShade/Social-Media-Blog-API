@@ -12,16 +12,16 @@ public class AccountServices {
     AccountDAO dao = new AccountDAO();
     
     //TODO: Add User method
-    public Account CreateAccount(String username, String password){
+    public Account CreateAccount(Account newAccount){
         //Check the parameters to be sure they meet requirements
-        if (username.equals(null) || username.equals("") || password.length() < 4){
+        if (newAccount.getUsername().equals(null) || newAccount.getUsername().equals("") || newAccount.getPassword().length() < 4){
             return null;
         }
-        return dao.CreateAccount(new Account(username, password));
+        return dao.CreateAccount(newAccount);
     }
 
     //TODO: Get user method
-    public Account Login(String username, String password){
+    public Account Login(Account loginAccount){
         return null;
     }
 }
