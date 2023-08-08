@@ -23,7 +23,7 @@ public class MessageDAO {
         //From here on in, we need a try-catch block
         try {
             //Create a statement
-            PreparedStatement sql = link.prepareStatement("INSERT INTO account VALUES (DEFAULT, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement sql = link.prepareStatement("INSERT INTO message VALUES (DEFAULT, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
 
             //Set sql's parameters
             sql.setInt(1, newMessage.getPosted_by());
