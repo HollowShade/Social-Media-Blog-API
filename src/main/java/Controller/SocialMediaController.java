@@ -153,16 +153,7 @@ public class SocialMediaController {
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
     private void GetAllMessages(Context context){
-        try{
-            context.json(translater.writeValueAsString(MessageServer.GetAllMessages()));
-        } //If an exception occurs, we want to know about it, we also want to tell JSON about the failure
-        catch (JsonMappingException e) {
-            e.printStackTrace();
-            //context.status(200); TODO: Find a better error
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            //context.status(200); TODO: Find a better error
-        }
+        context.json(MessageServer.GetAllMessages());
     }
 
     //TODO: Get message by ID method

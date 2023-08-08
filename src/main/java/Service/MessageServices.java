@@ -1,8 +1,10 @@
 package Service;
 
-//This service file needs to use the messageDAO and message model.
-import DAO.MessageDAO;
+//This service file needs to use the message model.
 import Model.Message;
+
+//The create message method calls for using both message and account DAOs
+import DAO.*;
 
 //This class also works with lists, import list.
 import java.util.List;
@@ -16,7 +18,20 @@ public class MessageServices {
 
     //TODO: Create message method
     public Message CreateMessage(Message text){
-        return null;
+        //Check if the message meets message requirements.
+        if (text.getMessage_text().equals("") || text.getMessage_text().equals(null) || text.getMessage_text().length() > 254){
+            return null;
+        }
+
+        //Make an AccountDAO and use it to see if the message's user ID exists in the account database
+        AccountDAO userTest = new AccountDAO();
+        
+        if (userTest.GetAccountByID(text.getPosted_by()) == null){
+            return null;
+        }
+
+        //If both requirements are met, create the message and return its results.
+        return dao.CreateMessage(text);
     }
 
     //TODO: Get all messages method

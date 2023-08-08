@@ -17,6 +17,37 @@ import java.sql.*;
 public class MessageDAO {
     //TODO: Create message method
     public Message CreateMessage(Message newMessage){
+        //Create a connection
+        Connection link = Util.ConnectionUtil.getConnection();
+
+        //From here on in, we need a try-catch block
+        try {
+            //Create a statement
+            PreparedStatement sql = link.prepareStatement("INSERT INTO account VALUES (DEFAULT, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+
+            //Set sql's parameters
+            sql.setInt(1, newMessage.getPosted_by());
+            sql.setString(2, newMessage.getMessage_text());
+            sql.setLong(3, newMessage.getTime_posted_epoch());
+
+            //Execute the sql statement
+            sql.executeUpdate();
+
+            //Retrieve the generated values
+            ResultSet newEntry = sql.getGeneratedKeys();
+
+            //Check if there's an entry, if so, add it's ID to the account object parameter and return it
+            if (newEntry.next()){
+                newMessage.setMessage_id(newEntry.getInt(1));
+                return newMessage;
+            }
+        } 
+        catch (SQLException e) {
+            //If something goes wrong, give the developer details
+            e.printStackTrace();
+        }
+
+        //If we're outside of the try catch block after the connection, assume the operation failed.
         return null;
     }
 
@@ -38,18 +69,14 @@ public class MessageDAO {
             while (messages.next()){
                 messageList.add(new Message(messages.getInt(1), messages.getInt(2), messages.getString(3), messages.getLong(4)));
             }
-
-            //When finished with the loop, close the link and return the message list.
-            link.close();
-            return messageList;
         } 
         catch (SQLException e) {
             //If something goes wrong, give the developer details
             e.printStackTrace();
         }
 
-        //If we're outside of the try catch block after the connection, assume the operation failed.
-        return null;
+        //Whatever happens, return the message list, even if it's empty (the controller's alright with an empty list)
+        return messageList;
     }
 
     //TODO: Get message by ID method
