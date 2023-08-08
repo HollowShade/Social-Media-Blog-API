@@ -21,7 +21,7 @@ public class MessageServices {
 
     //TODO: Get all messages method
     public List<Message> GetAllMessages(){
-        return null;
+        return dao.GetAllMessages();
     }
 
     //TODO: Get message by ID method

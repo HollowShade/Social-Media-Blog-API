@@ -3,8 +3,9 @@ package DAO;
 //This class works with messages, import the message model
 import Model.Message;
 
-//This class also works with lists, import list.
+//This class also works with lists, import list and linkedlist.
 import java.util.List;
+import java.util.LinkedList;
 
 //It also works with databases, import sql
 import java.sql.*;
@@ -21,6 +22,33 @@ public class MessageDAO {
 
     //TODO: Get all messages method
     public List<Message> GetAllMessages(){
+        //Create a connection and a list that will contain the messages in the message database
+        Connection link = Util.ConnectionUtil.getConnection();
+        List<Message> messageList = new LinkedList<>();
+
+        //From here on in, we need a try-catch block
+        try {
+            //Create a statement
+            Statement sql = link.createStatement();
+
+            //Execute the sql statement and retrieve the resultset
+            ResultSet messages = sql.executeQuery("SELECT * FROM message;");
+
+            //Take all the entries from the result set and add them to the message list
+            while (messages.next()){
+                messageList.add(new Message(messages.getInt(1), messages.getInt(2), messages.getString(3), messages.getLong(4)));
+            }
+
+            //When finished with the loop, close the link and return the message list.
+            link.close();
+            return messageList;
+        } 
+        catch (SQLException e) {
+            //If something goes wrong, give the developer details
+            e.printStackTrace();
+        }
+
+        //If we're outside of the try catch block after the connection, assume the operation failed.
         return null;
     }
 
