@@ -53,12 +53,12 @@ public class AccountDAO {
     }
 
     /**
-     * The GetAccountByLogin method takes an account from AccountServices and checks if it exists in the account database.
+     * The GetAccount method takes an account from AccountServices and checks if it exists in the account database.
      * If it succeeds, it returns the matching account
      * If it fails, it tells AccountServices that the account doesn't exist.
      * @param loginAccount The account provided by AccountServices
      */
-    public Account GetAccountByLogin(Account loginAccount){
+    public Account GetAccount(Account loginAccount){
         //Create a connection
         Connection link = Util.ConnectionUtil.getConnection();
 
@@ -78,41 +78,6 @@ public class AccountDAO {
             if (matchingAccount.next()){
                 loginAccount.setAccount_id(matchingAccount.getInt(1));
                 return loginAccount;
-            }
-        } 
-        catch (SQLException e) {
-            //If something goes wrong, give the developer details
-            e.printStackTrace();
-        }
-
-        //If we're outside of the try catch block after the connection, assume the operation failed.
-        return null;
-    }
-
-    /**
-     * The GetAccountByID method takes an int from MessageServices and checks if it's an ID in the account database.
-     * If it succeeds, it returns the matching account
-     * If it fails, it tells MessageServices that the account doesn't exist.
-     * @param loginAccount The account provided by AccountServices
-     */
-    public Account GetAccountByID(int id){
-        //Create a connection
-        Connection link = Util.ConnectionUtil.getConnection();
-
-        //From here on in, we need a try-catch block
-        try {
-            //Create a statement
-            PreparedStatement sql = link.prepareStatement("SELECT * FROM account WHERE account_id = ?;");
-
-            //Set sql's parameters
-            sql.setInt(1, id);
-
-            //Execute the sql statement and retrieve the resultset
-            ResultSet matchingAccount = sql.executeQuery();
-
-            //Check if there's an entry, if so, return it
-            if (matchingAccount.next()){
-                return new Account(matchingAccount.getInt(1), matchingAccount.getString(2), matchingAccount.getString(3));
             }
         } 
         catch (SQLException e) {

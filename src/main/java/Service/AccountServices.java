@@ -32,6 +32,6 @@ public class AccountServices {
      * @param loginAccount The account provided by the controller
      */
     public Account Login(Account loginAccount){
-        return dao.GetAccountByLogin(loginAccount);
+        return dao.GetAccount(loginAccount);
     }
 }
