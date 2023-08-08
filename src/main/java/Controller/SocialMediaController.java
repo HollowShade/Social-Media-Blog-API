@@ -43,23 +43,29 @@ public class SocialMediaController {
         app.post("login", this::Login);
 
         //TODO: Create message method and endpoint (POST localhost:8080/messages)
+        app.post("messages", this::CreateMessage);
 
         //TODO: Get all messages method and endpoint (GET localhost:8080/messages)
+        app.get("messages", this::GetAllMessages);
 
         //TODO: Get message by ID method and endpoint (GET localhost:8080/messages/{message_id})
+        app.get("messages/{message_id}", this::GetMessageByID);
+        
+        //TODO: Get messages by Account ID method and endpoint (GET localhost:8080/accounts/{account_id}/messages)
+        app.get("accounts/{account_id}/messages", this::GetMessagesByUser);
 
         //TODO: Delete message by ID method and endpoint (DELETE localhost:8080/messages/{message_id})
+        app.delete("messages/{message_id}", this::DeleteMessage);
 
         //TODO: Update message by ID method and endpoint (PATCH localhost:8080/messages/{message_id})
-
-        //TODO: Get messages by Account ID method and endpoint (GET localhost:8080/accounts/{account_id}/messages)
+        app.patch("messages/{message_id}", this::UpdateMessage);
 
         return app;
     }
 
     /**
      * The CreateAccount method takes a username and password from JSON and tells AccountServices to turn it into a new account
-     * for the account database.
+     * for the account database. The user should know if the account wasn't added to the database
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
     private void CreateAccount(Context context){
@@ -115,12 +121,75 @@ public class SocialMediaController {
     }
 
     /**
+     * The CreateMessage method takes a message from JSON and tells MessageServices to turn it into a new message
+     * for the message database. The user should know if the message wasn't added to the database.
+     * @param context The Javalin Context object manages information about both the HTTP request and response.
+     */
+    private void CreateMessage(Context context){
+        try {
+            //Get input from JSON and send it to MessageServices
+            Message input = translater.readValue(context.body(), Message.class);
+            Message newMessage = MessageServer.CreateMessage(input);
+
+            //The method succeeds if newAccount isn't null, in which case we return the account to json. Otherwise, tell JSON that the method failed.
+            if(newMessage != null){
+                context.json(translater.writeValueAsString(newMessage));
+            }
+            else {
+                context.status(400);
+            }
+        } //If an exception occurs, we want to know about it, we also want to tell JSON about the failure
+        catch (JsonMappingException e) {
+            e.printStackTrace();
+            //context.status(400); TODO: Find a better error
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            //context.status(400); TODO: Find a better error
+        }
+    }
+
+    /**
+     * The GetAllMessagesMethod returns all the messages in the message database, even if it's empty
+     * @param context The Javalin Context object manages information about both the HTTP request and response.
+     */
+    private void GetAllMessages(Context context){
+        try{
+            context.json(translater.writeValueAsString(MessageServer.GetAllMessages()));
+        } //If an exception occurs, we want to know about it, we also want to tell JSON about the failure
+        catch (JsonMappingException e) {
+            e.printStackTrace();
+            //context.status(200); TODO: Find a better error
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            //context.status(200); TODO: Find a better error
+        }
+    }
+
+    //TODO: Get message by ID method
+    private void GetMessageByID(Context context){
+
+    }
+
+    //TODO: Get messages by Account ID method
+    private void GetMessagesByUser(Context context){
+
+    }
+
+    //TODO: Delete message by ID method
+    private void DeleteMessage(Context context){
+
+    }
+
+    //TODO: Update message by ID method
+    private void UpdateMessage(Context context){
+
+    }
+
+    /**
      * This is an example handler for an example endpoint. I've commented it out so users can't use it in the final version of the app.
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      
     private void exampleHandler(Context context) {
         context.json("sample text");
     }*/
-
-
 }

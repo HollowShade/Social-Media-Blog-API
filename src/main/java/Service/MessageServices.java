@@ -15,7 +15,7 @@ public class MessageServices {
     MessageDAO dao = new MessageDAO();
 
     //TODO: Create message method
-    public Message CreateMessage(String text){
+    public Message CreateMessage(Message text){
         return null;
     }
 
