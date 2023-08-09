@@ -147,30 +147,25 @@ public class MessageDAO {
     }
 
     //TODO: Update message by ID method
-    public Message UpdateMessage(Message newMessage){
+    public Message UpdateMessage(Message messageUpdate){
         //Create a connection
         Connection link = Util.ConnectionUtil.getConnection();
 
         //From here on in, we need a try-catch block
         try {
             //Create a statement
-            PreparedStatement sql = link.prepareStatement("INSERT INTO message VALUES (DEFAULT, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement sql = link.prepareStatement("UPDATE message SET message_text = ? WHERE message_id = ?;");
 
             //Set sql's parameters
-            sql.setInt(1, newMessage.getPosted_by());
-            sql.setString(2, newMessage.getMessage_text());
-            sql.setLong(3, newMessage.getTime_posted_epoch());
+            sql.setString(1, messageUpdate.getMessage_text());
+            sql.setInt(2, messageUpdate.getMessage_id());
 
-            //Execute the sql statement
-            sql.executeUpdate();
+            //Execute the sql statement and collect the rows updated
+            int success = sql.executeUpdate();
 
-            //Retrieve the generated values
-            ResultSet newEntry = sql.getGeneratedKeys();
-
-            //Check if there's an entry, if so, add it's ID to the account object parameter and return it
-            if (newEntry.next()){
-                newMessage.setMessage_id(newEntry.getInt(1));
-                return newMessage;
+            //If a row was updated, retrieve and return it's contents
+            if (success > 0){
+                return this.GetMessageByID(messageUpdate.getMessage_id());
             }
         } 
         catch (SQLException e) {
@@ -195,7 +190,7 @@ public class MessageDAO {
             //From here on in, we need a try-catch block
             try {
                 //Create a statement
-                PreparedStatement sql = link.prepareStatement("DELETE * FROM message WHERE message_id = ?;");
+                PreparedStatement sql = link.prepareStatement("DELETE FROM message WHERE message_id = ?;");
 
                 //Set sql's parameters
                 sql.setInt(1, messageID);
