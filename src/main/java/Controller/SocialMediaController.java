@@ -84,10 +84,8 @@ public class SocialMediaController {
         } //If an exception occurs, we want to know about it, we also want to tell JSON about the failure
         catch (JsonMappingException e) {
             e.printStackTrace();
-            //context.status(400); TODO: Find a better error
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            //context.status(400); TODO: Find a better error
         }
     }
 
@@ -101,7 +99,7 @@ public class SocialMediaController {
         try {
             //Get input from JSON and send it to AccountServices
             Account input = translater.readValue(context.body(), Account.class);
-            Account loginAccount = AccountServer.CreateAccount(input);
+            Account loginAccount = AccountServer.Login(input);
 
             //The method succeeds if newAccount isn't null, in which case we return the account to json. Otherwise, tell JSON that the method failed.
             if(loginAccount != null){
@@ -113,10 +111,8 @@ public class SocialMediaController {
         } //If an exception occurs, we want to know about it, we also want to tell JSON about the failure
         catch (JsonMappingException e) {
             e.printStackTrace();
-            //context.status(401); TODO: Find a better error
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            //context.status(401); TODO: Find a better error
         }
     }
 
@@ -141,10 +137,8 @@ public class SocialMediaController {
         } //If an exception occurs, we want to know about it, we also want to tell JSON about the failure
         catch (JsonMappingException e) {
             e.printStackTrace();
-            //context.status(400); TODO: Find a better error
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            //context.status(400); TODO: Find a better error
         }
     }
 
@@ -218,10 +212,8 @@ public class SocialMediaController {
         } //If an exception occurs, we want to know about it, we also want to tell JSON about the failure
         catch (JsonMappingException e) {
             e.printStackTrace();
-            //context.status(400); TODO: Find a better error
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            //context.status(400); TODO: Find a better error
         }
     }
 
