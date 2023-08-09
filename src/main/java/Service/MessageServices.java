@@ -14,7 +14,12 @@ public class MessageServices {
     //MessageDao field for accessing the messageDao
     MessageDAO dao = new MessageDAO();
 
-    //TODO: Create message method
+    /**
+     * The CreateMessage method takes a message from the controller and tells the message DAO to turn it into a new message
+     * for the message database if the message meets some requirements. These requirements are to not be empty and to not be over
+     * 254 characters in length. If the message wasn't created, tell the controller as such. Otherwise, send it the new message.
+     * @param text The message from the controller
+     */
     public Message CreateMessage(Message text){
         //Check if the message meets message requirements.
         if (text.getMessage_text().equals("") || text.getMessage_text().equals(null) || text.getMessage_text().length() > 254){
@@ -25,24 +30,26 @@ public class MessageServices {
         return dao.CreateMessage(text);
     }
 
-    //TODO: Get all messages method
+    /**
+     * The GetAllMessagesMethod returns all the messages in the message database, even if it's empty
+     */
     public List<Message> GetAllMessages(){
         return dao.GetAllMessages();
     }
 
     //TODO: Get message by ID method
     public Message GetMessageByID(int id){
-        return null;
+        return dao.GetMessageByID(id);
     }
 
     //TODO: Get messages by Account ID method
     public List<Message> GetMessagesByUser(int userID){
-        return null;
+        return dao.GetMessagesByUser(userID);
     }
 
     //TODO: Delete message by ID method
     public Message DeleteMessage(int id){
-        return null;
+        return dao.DeleteMessage(id);
     }
 
     //TODO: Update message by ID method

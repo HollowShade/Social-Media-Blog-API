@@ -15,7 +15,11 @@ import java.sql.*;
  * It will create, read, update, and delete messages per the user's request
  */
 public class MessageDAO {
-    //TODO: Create message method
+    /**
+     * The CreateMessage method takes a message from message services and turns it into a new message for the message database. 
+     * If the message wasn't created, tell message services as such. Otherwise, send it the new message.
+     * @param text The message from message services
+     */
     public Message CreateMessage(Message newMessage){
         //Create a connection
         Connection link = Util.ConnectionUtil.getConnection();
@@ -51,7 +55,9 @@ public class MessageDAO {
         return null;
     }
 
-    //TODO: Get all messages method
+    /**
+     * The GetAllMessagesMethod returns all the messages in the message database, even if it's empty
+     */
     public List<Message> GetAllMessages(){
         //Create a connection and a list that will contain the messages in the message database
         Connection link = Util.ConnectionUtil.getConnection();
@@ -81,12 +87,63 @@ public class MessageDAO {
 
     //TODO: Get message by ID method
     public Message GetMessageByID(int messageID){
+        //Create a connection
+        Connection link = Util.ConnectionUtil.getConnection();
+
+        //From here on in, we need a try-catch block
+        try {
+            //Create a statement
+            PreparedStatement sql = link.prepareStatement("SELECT * FROM message WHERE message_id = ?;");
+
+            //Set sql's parameters
+            sql.setInt(1, messageID);
+
+            //Execute the sql statement and retrieve the query
+            ResultSet targetMessage = sql.executeQuery();
+
+            //Check if there's an entry. If there is one, return it
+            if (targetMessage.next()){
+                return new Message(targetMessage.getInt(1), targetMessage.getInt(2), targetMessage.getString(3), targetMessage.getLong(4));
+            }
+        } 
+        catch (SQLException e) {
+            //If something goes wrong, give the developer details
+            e.printStackTrace();
+        }
+
+        //If we're outside of the try catch block after the connection, assume the operation failed.
         return null;
     }
     
     //TODO: Get messages by Account ID method
     public List<Message> GetMessagesByUser(int userID){
-        return null;
+        //Create a connection and a list that will contain the messages in the message database
+        Connection link = Util.ConnectionUtil.getConnection();
+        List<Message> messageList = new LinkedList<>();
+
+        //From here on in, we need a try-catch block
+        try {
+            //Create a statement
+            PreparedStatement sql = link.prepareStatement("SELECT * FROM message WHERE posted_by = ?;");
+
+            //Set sql's parameters
+            sql.setInt(1, userID);
+
+            //Execute the sql statement and retrieve the resultset
+            ResultSet messages = sql.executeQuery();
+
+            //Take all the entries from the result set and add them to the message list
+            while (messages.next()){
+                messageList.add(new Message(messages.getInt(1), messages.getInt(2), messages.getString(3), messages.getLong(4)));
+            }
+        } 
+        catch (SQLException e) {
+            //If something goes wrong, give the developer details
+            e.printStackTrace();
+        }
+
+        //Whatever happens, return the message list, even if it's empty (the controller's alright with an empty list)
+        return messageList;
     }
 
     //TODO: Update message by ID method
@@ -96,6 +153,31 @@ public class MessageDAO {
 
     //TODO: Delete message by ID method
     public Message DeleteMessage(int messageID){
+        //Create a connection
+        Connection link = Util.ConnectionUtil.getConnection();
+
+        //From here on in, we need a try-catch block
+        try {
+            //Create a statement
+            PreparedStatement sql = link.prepareStatement("DELETE * FROM message WHERE message_id = ?;");
+
+            //Set sql's parameters
+            sql.setInt(1, messageID);
+
+            //Execute the sql statement and retrieve the query
+            ResultSet targetMessage = sql.executeQuery();
+
+            //Check if there's an entry. If there is one, return it
+            if (targetMessage.next()){
+                return new Message(targetMessage.getInt(1), targetMessage.getInt(2), targetMessage.getString(3), targetMessage.getLong(4));
+            }
+        } 
+        catch (SQLException e) {
+            //If something goes wrong, give the developer details
+            e.printStackTrace();
+        }
+
+        //If we're outside of the try catch block after the connection, assume the operation failed.
         return null;
     }
 }

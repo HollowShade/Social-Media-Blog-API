@@ -42,16 +42,16 @@ public class SocialMediaController {
         //Login endpoint
         app.post("login", this::Login);
 
-        //TODO: Create message method and endpoint (POST localhost:8080/messages)
+        //Create Message endpoint
         app.post("messages", this::CreateMessage);
 
-        //TODO: Get all messages method and endpoint (GET localhost:8080/messages)
+        //Get all messages endpoint
         app.get("messages", this::GetAllMessages);
 
-        //TODO: Get message by ID method and endpoint (GET localhost:8080/messages/{message_id})
+        //Get message by message id endpoint
         app.get("messages/{message_id}", this::GetMessageByID);
         
-        //TODO: Get messages by Account ID method and endpoint (GET localhost:8080/accounts/{account_id}/messages)
+        //Get messages by account id endpoint
         app.get("accounts/{account_id}/messages", this::GetMessagesByUser);
 
         //TODO: Delete message by ID method and endpoint (DELETE localhost:8080/messages/{message_id})
@@ -158,17 +158,20 @@ public class SocialMediaController {
 
     //TODO: Get message by ID method
     private void GetMessageByID(Context context){
-
+        int messageID = Integer.parseInt(context.pathParam("message_id"));
+        context.json(MessageServer.GetMessageByID(messageID));
     }
 
     //TODO: Get messages by Account ID method
     private void GetMessagesByUser(Context context){
-
+        int accountID = Integer.parseInt(context.pathParam("account_id"));
+        context.json(MessageServer.GetMessagesByUser(accountID));
     }
 
     //TODO: Delete message by ID method
     private void DeleteMessage(Context context){
-
+        int messageID = Integer.parseInt(context.pathParam("message_id"));
+        context.json(MessageServer.DeleteMessage(messageID));
     }
 
     //TODO: Update message by ID method
