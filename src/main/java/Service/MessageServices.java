@@ -37,22 +37,38 @@ public class MessageServices {
         return dao.GetAllMessages();
     }
 
-    //TODO: Get message by ID method
+    /**
+     * The GetMessageByID method takes a message ID provided by the controller and tells the MessageDAO to find a message in the
+     * message database with the same ID.
+     * @param id The ID from the URL's endpoint.
+     */
     public Message GetMessageByID(int id){
         return dao.GetMessageByID(id);
     }
 
-    //TODO: Get messages by Account ID method
+    /**
+     * The GetMessagesByUser takes a user ID provided by the controller and tells the MessageDAO to retrieve all messages with
+     * this user ID so it can return them to the controller, even if this user hasn't made any posts.
+     * @param userID The UserID from the URL's endpoint.
+     */
     public List<Message> GetMessagesByUser(int userID){
         return dao.GetMessagesByUser(userID);
     }
 
-    //TODO: Delete message by ID method
+    /**
+     * The DeleteMessage method takes the message ID provided by the controller and tells the messageDAO to retrieve and delete the
+     * message in the message database with the same ID.
+     * @param id The ID from the URL's endpoint.
+     */
     public Message DeleteMessage(int id){
         return dao.DeleteMessage(id);
     }
 
-    //TODO: Update message by ID method
+    /**
+     * The UpdateMessage method takes a message from the controller and tells the MessageDAO to update and retrieve the
+     * message in the message database with the same ID with a new message provided in the input.
+     * @param messageUpdate The message from the controller
+     */
     public Message UpdateMessage(Message messageUpdate){
         //Check if the message meets message requirements.
         if (messageUpdate.getMessage_text().equals("") || messageUpdate.getMessage_text().equals(null) || messageUpdate.getMessage_text().length() > 254){

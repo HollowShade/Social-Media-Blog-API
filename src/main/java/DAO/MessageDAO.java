@@ -85,7 +85,11 @@ public class MessageDAO {
         return messageList;
     }
 
-    //TODO: Get message by ID method
+    /**
+     * The GetMessageByID method takes a message ID provided by message services and searches for a message with that ID in the
+     * message database.
+     * @param id The ID from the URL's endpoint.
+     */
     public Message GetMessageByID(int messageID){
         //Create a connection
         Connection link = Util.ConnectionUtil.getConnection();
@@ -115,7 +119,11 @@ public class MessageDAO {
         return null;
     }
     
-    //TODO: Get messages by Account ID method
+    /**
+     * The GetMessagesByUser takes a user ID provided by message services, retrieves all messages with this user ID, and returns 
+     * them to message services. If there are no messages associated with a User ID, message services will get an empty list.
+     * @param userID The UserID from the URL's endpoint.
+     */
     public List<Message> GetMessagesByUser(int userID){
         //Create a connection and a list that will contain the messages in the message database
         Connection link = Util.ConnectionUtil.getConnection();
@@ -146,7 +154,11 @@ public class MessageDAO {
         return messageList;
     }
 
-    //TODO: Update message by ID method
+    /**
+     * The UpdateMessage method takes a message from message services, updates the message in the message database with the same ID
+     * with a new message from the input, then retrieves and returns the updated message to message services.
+     * @param messageUpdate The message from message services.
+     */
     public Message UpdateMessage(Message messageUpdate){
         //Create a connection
         Connection link = Util.ConnectionUtil.getConnection();
@@ -177,7 +189,11 @@ public class MessageDAO {
         return null;
     }
 
-    //TODO: Delete message by ID method
+    /**
+     * The DeleteMessage method takes the message ID provided by message services, retrieves and deletes the
+     * message with the same ID from the message database, and returns the deleted message to message services.
+     * @param id The ID from the URL's endpoint.
+     */
     public Message DeleteMessage(int messageID){
         //Create a connection
         Connection link = Util.ConnectionUtil.getConnection();

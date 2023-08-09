@@ -156,25 +156,51 @@ public class SocialMediaController {
         context.json(MessageServer.GetAllMessages());
     }
 
-    //TODO: Get message by ID method
+    /**
+     * The GetMessageByID method takes the message ID in the url's endpoint and tells message services to find a message in the
+     * message database with the same ID.
+     * @param context The Javalin Context object manages information about both the HTTP request and response.
+     */
     private void GetMessageByID(Context context){
         int messageID = Integer.parseInt(context.pathParam("message_id"));
-        context.json(MessageServer.GetMessageByID(messageID));
+
+        //Check if there's a message associated with messageID. If there is a value, send it to JSON
+        Message targetMessage = MessageServer.GetMessageByID(messageID);
+        if(targetMessage != null){
+            context.json(targetMessage);
+        }
     }
 
-    //TODO: Get messages by Account ID method
+    /**
+     * The GetMessagesByUser method takes the user ID in the url's endpoint and tells message services to retrieve all messages 
+     * with this user ID so it can return them to the user, even if this user hasn't made any posts.
+     * @param context The Javalin Context object manages information about both the HTTP request and response.
+     */
     private void GetMessagesByUser(Context context){
         int accountID = Integer.parseInt(context.pathParam("account_id"));
         context.json(MessageServer.GetMessagesByUser(accountID));
     }
 
-    //TODO: Delete message by ID method
+    /**
+     * The DeleteMessage method takes the message ID in the url's endpoint and tells message services to retrieve and delete the
+     * message in the message database with the same ID.
+     * @param context The Javalin Context object manages information about both the HTTP request and response.
+     */
     private void DeleteMessage(Context context){
         int messageID = Integer.parseInt(context.pathParam("message_id"));
-        context.json(MessageServer.DeleteMessage(messageID));
+        
+        //Check if there's a message associated with messageID. If there is a value, send it to JSON
+        Message deletedMessage = MessageServer.DeleteMessage(messageID);
+        if(deletedMessage != null){
+            context.json(deletedMessage);
+        }
     }
 
-    //TODO: Update message by ID method
+    /**
+     * The UpdateMessage method takes the message ID in the url's endpoint and tells message services to update and retrieve the
+     * message in the message database with the same ID with a new message provided in the context's body.
+     * @param context The Javalin Context object manages information about both the HTTP request and response.
+     */
     private void UpdateMessage(Context context){
         try {
             //Get input from JSON and send it to MessageServices
