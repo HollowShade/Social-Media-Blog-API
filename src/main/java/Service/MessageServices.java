@@ -53,7 +53,13 @@ public class MessageServices {
     }
 
     //TODO: Update message by ID method
-    public Message UpdateMessage(int id){
-        return null;
+    public Message UpdateMessage(Message messageUpdate){
+        //Check if the message meets message requirements.
+        if (messageUpdate.getMessage_text().equals("") || messageUpdate.getMessage_text().equals(null) || messageUpdate.getMessage_text().length() > 254){
+            return null;
+        }
+
+        //If the requirements are met, create the message and return its results.
+        return dao.UpdateMessage(messageUpdate);
     }
 }

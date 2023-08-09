@@ -147,29 +147,30 @@ public class MessageDAO {
     }
 
     //TODO: Update message by ID method
-    public Message UpdatMessage(Message newMessage){
-        return null;
-    }
-
-    //TODO: Delete message by ID method
-    public Message DeleteMessage(int messageID){
+    public Message UpdateMessage(Message newMessage){
         //Create a connection
         Connection link = Util.ConnectionUtil.getConnection();
 
         //From here on in, we need a try-catch block
         try {
             //Create a statement
-            PreparedStatement sql = link.prepareStatement("DELETE * FROM message WHERE message_id = ?;");
+            PreparedStatement sql = link.prepareStatement("INSERT INTO message VALUES (DEFAULT, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
 
             //Set sql's parameters
-            sql.setInt(1, messageID);
+            sql.setInt(1, newMessage.getPosted_by());
+            sql.setString(2, newMessage.getMessage_text());
+            sql.setLong(3, newMessage.getTime_posted_epoch());
 
-            //Execute the sql statement and retrieve the query
-            ResultSet targetMessage = sql.executeQuery();
+            //Execute the sql statement
+            sql.executeUpdate();
 
-            //Check if there's an entry. If there is one, return it
-            if (targetMessage.next()){
-                return new Message(targetMessage.getInt(1), targetMessage.getInt(2), targetMessage.getString(3), targetMessage.getLong(4));
+            //Retrieve the generated values
+            ResultSet newEntry = sql.getGeneratedKeys();
+
+            //Check if there's an entry, if so, add it's ID to the account object parameter and return it
+            if (newEntry.next()){
+                newMessage.setMessage_id(newEntry.getInt(1));
+                return newMessage;
             }
         } 
         catch (SQLException e) {
@@ -179,5 +180,42 @@ public class MessageDAO {
 
         //If we're outside of the try catch block after the connection, assume the operation failed.
         return null;
+    }
+
+    //TODO: Delete message by ID method
+    public Message DeleteMessage(int messageID){
+        //Create a connection
+        Connection link = Util.ConnectionUtil.getConnection();
+
+        //To return the deleted message, we should retrieve it before deleting it
+        Message deletedMessage = this.GetMessageByID(messageID);
+
+        //The retrieved message might be empty. If it is, there's nothing to delete.
+        if (deletedMessage != null){
+            //From here on in, we need a try-catch block
+            try {
+                //Create a statement
+                PreparedStatement sql = link.prepareStatement("DELETE * FROM message WHERE message_id = ?;");
+
+                //Set sql's parameters
+                sql.setInt(1, messageID);
+
+                //Execute the sql statement and retrieve the rows affected
+                int success  = sql.executeUpdate();
+
+                //If no rows were affected, nothing was deleted, so null the target message
+                if (success == 0){
+                    deletedMessage = null;
+                }
+            } 
+            catch (SQLException e) {
+                //If something goes wrong, give the developer details and null the target message
+                e.printStackTrace();
+                deletedMessage = null;
+            }
+        }
+
+        //Once the code is finished, return the deletedMessage, even if it doesn't contain a message
+        return deletedMessage;
     }
 }

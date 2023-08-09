@@ -54,10 +54,10 @@ public class SocialMediaController {
         //Get messages by account id endpoint
         app.get("accounts/{account_id}/messages", this::GetMessagesByUser);
 
-        //TODO: Delete message by ID method and endpoint (DELETE localhost:8080/messages/{message_id})
+        //Delete message endpoint
         app.delete("messages/{message_id}", this::DeleteMessage);
 
-        //TODO: Update message by ID method and endpoint (PATCH localhost:8080/messages/{message_id})
+        //Update message endpoint
         app.patch("messages/{message_id}", this::UpdateMessage);
 
         return app;
@@ -176,7 +176,27 @@ public class SocialMediaController {
 
     //TODO: Update message by ID method
     private void UpdateMessage(Context context){
+        try {
+            //Get input from JSON and send it to MessageServices
+            Message input = translater.readValue(context.body(), Message.class);
+            input.setMessage_id(Integer.parseInt(context.pathParam("message_id")));
+            Message updatedMessage = MessageServer.UpdateMessage(input);
 
+            //The method succeeds if newAccount isn't null, in which case we return the account to json. Otherwise, tell JSON that the method failed.
+            if(updatedMessage != null){
+                context.json(translater.writeValueAsString(updatedMessage));
+            }
+            else {
+                context.status(400);
+            }
+        } //If an exception occurs, we want to know about it, we also want to tell JSON about the failure
+        catch (JsonMappingException e) {
+            e.printStackTrace();
+            //context.status(400); TODO: Find a better error
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            //context.status(400); TODO: Find a better error
+        }
     }
 
     /**
