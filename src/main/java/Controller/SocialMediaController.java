@@ -15,16 +15,16 @@ import Model.*;
 import Service.*;
 
 /**
- * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
- * found in readme.md as well as the test cases. You should
- * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
+ * The SocialMediaController class connects user inputs to the database via the service objects contained in this class.
+ * Depending on the user's actions and the endpoint of the page they're at, this class can serve as the root of creating new
+ * accounts and messages, logging in, retrieving, updating, and deleting messages.
  */
 public class SocialMediaController {
     //Objects that allow us to access service methods
     AccountServices AccountServer = new AccountServices();
     MessageServices MessageServer = new MessageServices();
 
-    //Can an objectmapper be a field?
+    //Can an objectmapper be a field? Project performance says yes
     ObjectMapper translater = new ObjectMapper();
     
     /**
